@@ -1,0 +1,13 @@
+Reviewing software security on code layer is already part of the routine. However we also need to perform test for new feature to actually ensure that it is really secure. Especially now that agent can perform interaction in browser or call API.
+
+Task
+...
+
+Friction
+...
+
+Desired State
+...
+
+Impact
+...

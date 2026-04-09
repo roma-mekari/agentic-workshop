@@ -1,0 +1,22 @@
+{
+	"hooks": {
+		"PreToolUse": [
+			{
+				"type": "command",
+				"command": "python3 .github/hooks/audit_mcp_tool_call.py",
+				"windows": "py -3 .github\\hooks\\audit_mcp_tool_call.py",
+				"cwd": ".",
+				"timeout": 10
+			}
+		],
+		"SubagentStop": [
+			{
+				"type": "command",
+				"command": "python3 .github/hooks/validate_subagent_action.py",
+				"windows": "py -3 .github\\hooks\\validate_subagent_action.py",
+				"cwd": ".",
+				"timeout": 30
+			}
+		]
+	}
+}
