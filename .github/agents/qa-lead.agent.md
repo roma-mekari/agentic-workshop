@@ -59,6 +59,14 @@ score = (requirements_pass% * 0.4) + (plan_complete% * 0.3) + (test_coverage% * 
 - DO NOT leave the verdict field blank.
 - ONLY produce the QA_REPORT.md file.
 
+## Improvement Signals
+
+While verifying, if you encounter any of the following, note them in your output message so the orchestrator can flag them for Athena:
+- Acceptance criteria in REQUIREMENTS.md are ambiguous or untestable
+- The plan omitted steps that turned out to be necessary
+- The QA_REPORT.md template is missing sections you needed
+- Code quality issues that no agent's instructions currently prevent
+
 ## Output
 
 Return a single message to the orchestrator:

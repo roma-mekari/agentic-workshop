@@ -36,6 +36,10 @@ You will receive:
 - DO NOT contradict requirements. If a constraint cannot be met architecturally, flag it explicitly.
 - ONLY produce the PLAN.md file.
 
+## Codebase Investigation
+
+If you need to understand existing code before planning (e.g., how an existing module works, what patterns are in use, what files would be affected), request that the orchestrator invoke the `explorer` subagent first. Do not guess at existing code structure — ask for investigation.
+
 ## Output
 
 Return a single message to the orchestrator:

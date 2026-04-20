@@ -31,6 +31,7 @@ Every stage has a **human review gate** — the orchestrator pauses for approval
 | **QA Lead** | Verifies implementation against requirements and produces QA reports | `.github/agents/qa-lead.agent.md` | No |
 | **Tech Writer** | Produces the permanent Architectural Decision Record (ADR) | `.github/agents/tech-writer.agent.md` | No |
 | **Athena** | Meta-agent that analyzes workflow failures and proposes instruction improvements | `.github/agents/athena.agent.md` | Yes |
+| **Explorer** | Read-only codebase investigator for tracing code paths, mapping dependencies, and discovering patterns | `.github/agents/explorer.agent.md` | Yes |
 
 ## Quick Start
 
@@ -48,7 +49,17 @@ In VS Code Copilot Chat, invoke the SDLC Orchestrator:
 
 The orchestrator will walk through all stages, pausing for your review at each gate.
 
-### 3. Invoke Athena (optional)
+### 3. Investigate the codebase (optional)
+
+Use the Explorer agent directly for ad-hoc codebase investigation:
+
+```
+@explorer How does the authentication middleware work? Trace the request flow from the HTTP handler to the database.
+```
+
+The Explorer is also invoked automatically by the orchestrator when agents need codebase context.
+
+### 4. Invoke Athena (optional)
 
 After a run that felt inefficient or had repeated QA rejections, invoke Athena manually:
 
@@ -70,7 +81,8 @@ Athena produces an advisory report with proposed instruction changes. Review and
 │   ├── implementor.agent.md
 │   ├── qa-lead.agent.md
 │   ├── tech-writer.agent.md
-│   └── athena.agent.md
+│   ├── athena.agent.md
+│   └── explorer.agent.md
 ├── workflow_templates/          # Templates agents use to produce artifacts
 │   ├── REQUIREMENTS.md
 │   ├── PLAN.md
@@ -113,8 +125,11 @@ If `project-config.md` is absent, agents will attempt to infer conventions from 
 
 ## Design Principles
 
-- **Agent isolation:** Each agent has a strict scope and cannot perform another agent's job
+- **Agent isolation:** Each agent has a strict scope, fresh context, and cannot perform another agent's job (inspired by Hermes's delegate tool architecture)
 - **Human-in-the-loop:** Every stage requires human approval before proceeding
 - **Language agnosticism:** All agents derive conventions from `project-config.md`, not hardcoded assumptions
 - **Advisory improvement:** Athena proposes changes but never applies them automatically
+- **Behavioral self-improvement:** Agents flag gaps in instructions and templates during normal work, feeding Athena's analysis
+- **Explore before acting:** The Explorer agent investigates the codebase with isolated context before other agents make assumptions about existing code
+- **Circuit breakers:** Revision cycle caps and anti-loop detection prevent infinite feedback loops
 - **Artifact trail:** Every feature produces REQUIREMENTS.md → PLAN.md → Code → QA_REPORT.md → ADR.md

@@ -45,6 +45,14 @@ Follow the conventions defined in `.github/project-config.md`. In the absence of
 - DO NOT leave TODO comments or placeholder logic in committed code.
 - DO NOT break existing passing tests.
 
+## Improvement Signals
+
+While implementing, if you encounter any of the following, note them in your output message so the orchestrator can surface them:
+- The plan references a file or module that doesn't exist and wasn't anticipated
+- The plan's phase ordering caused you to need something from a later phase
+- The project conventions in `project-config.md` are incomplete or inaccurate
+- A test strategy from the plan is impractical to implement as described
+
 ## Output
 
 Return a single message to the orchestrator:

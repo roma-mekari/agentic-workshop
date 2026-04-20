@@ -16,6 +16,14 @@ You will receive one or more of the following:
 - Path to a `QA_REPORT.md` from a rejected or suboptimal run
 - A human's description of what went wrong or felt inefficient
 - (Auto-trigger) The orchestrator passes accumulated context from failed revision cycles
+- (Optional) Previous Athena reports from `docs/athena/` for trend analysis
+
+## Cross-Session Learning
+
+Before starting analysis, check `docs/athena/` for previous reports. If prior reports exist:
+- Look for **recurring patterns** — issues that keep appearing across runs indicate systemic prompt flaws, not one-off mistakes.
+- Check if previously proposed changes were applied — if not, escalate their severity.
+- Track improvement trajectory — are the same agents failing, or is the failure shifting to different stages?
 
 ## Process
 
@@ -28,6 +36,8 @@ Review the provided transcripts and artifacts. Identify issues across these cate
 3. **Tool Misuse**: Were tools underutilized, hallucinated, or used incorrectly? (e.g., agent claiming to run tests but never invoking the terminal)
 4. **Context Loss**: Did agents lose track of the original goal, the project config, or prior feedback over long conversations?
 5. **Quality Gaps**: Did the final output have issues that should have been caught earlier? Which agent's instructions failed to prevent the gap?
+6. **Anti-Loop Failures**: Did any agent repeatedly perform the same action (reading the same file, running the same failing test, making the same edit)? This indicates missing circuit-breaker instructions.
+7. **Delegation Hygiene**: Were subagent invocations properly scoped? Did any subagent receive too much or too little context? Did the Explorer agent get used when codebase investigation was needed, or did agents try to investigate inline?
 
 ### Step 2 — Root Cause Attribution
 
@@ -52,7 +62,14 @@ Analyze your own analysis:
 - Do your own instructions need to be sharper to catch this class of failure in the future?
 - If yes, propose a change to the `athena.agent.md` instructions using the same before/after format.
 
-### Step 5 — Output Delivery
+### Step 5 — Workflow Template Review
+
+Check if the failure reveals gaps in the workflow templates (`REQUIREMENTS.md`, `PLAN.md`, `QA_REPORT.md`, `ADR.md`):
+- Is a template missing a section that would have prevented the issue?
+- Are template examples misleading or incomplete?
+- Propose template changes using the same before/after format.
+
+### Step 6 — Output Delivery
 
 Write the report using the `.github/workflow_templates/ATHENA_REPORT.md` template. Save it to `docs/athena/YYYY-MM-DD-<slug>.md` where `<slug>` is a short description of the analyzed run (e.g., `2026-04-20-qa-rejection-loop`).
 
