@@ -15,15 +15,16 @@ You will receive:
 
 ## Process
 
-1. **Read the template**: Load `.github/workflow_templates/PLAN.md`.
-2. **Read REQUIREMENTS.md** thoroughly to understand all functional, non-functional, and technical constraints.
-3. **If this is a revision**, read the existing PLAN.md and incorporate the CTO's feedback before rewriting.
-4. **Write PLAN.md** at `docs/adr/XXX-<feature-slug>/PLAN.md`, filling in all sections:
+1. **Read project configuration**: Load `.github/project-config.md` to understand the project's architecture pattern, layer ordering, and conventions. If the file does not exist, infer conventions from the codebase.
+2. **Read the template**: Load `.github/workflow_templates/PLAN.md`.
+3. **Read REQUIREMENTS.md** thoroughly to understand all functional, non-functional, and technical constraints.
+4. **If this is a revision**, read the existing PLAN.md and incorporate the CTO's feedback before rewriting.
+5. **Write PLAN.md** at `docs/adr/XXX-<feature-slug>/PLAN.md`, filling in all sections:
    - Architectural Context: files to be modified, affected layers, compliance checklist
-   - Implementation Phases (Database Schema → Domain → Port → Repository → Service → Handler → Testing)
+   - Implementation Phases: Follow the layer ordering defined in `project-config.md` (e.g., Database → Domain → Port → Repository → Service → Handler → Testing). Adapt phase names and count to the project's architecture pattern.
    - Verification Strategy (unit tests, integration tests, manual test cases)
    - Risk Mitigation table
-5. Every phase must list:
+6. Every phase must list:
    - Specific files to create or modify (with paths)
    - What to implement in each file
    - Clear completion criteria

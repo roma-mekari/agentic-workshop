@@ -24,8 +24,10 @@ Date: YYYY-MM-DD
 
 ## 2. The Implementation Plan
 
-### Phase 1: Database Schema
-**Goal:** Define and migrate database structures
+> **Note:** The phases below are examples based on a layered architecture. Adapt phase names, ordering, and count to match the architecture pattern defined in `.github/project-config.md`.
+
+### Phase 1: Data Layer
+**Goal:** Define and migrate data structures (schemas, models, migrations)
 
 ---
 
@@ -34,23 +36,23 @@ Date: YYYY-MM-DD
 
 ---
 
-### Phase 3: Port Layer
-**Goal:** Define interfaces and data transfer objects
+### Phase 3: Interface / Port Layer
+**Goal:** Define interfaces, DTOs, and contracts between layers
 
 ---
 
-### Phase 4: Repository Layer
-**Goal:** Implement data persistence
+### Phase 4: Data Access Layer
+**Goal:** Implement data persistence (repositories, data mappers, query builders)
 
 ---
 
-### Phase 5: Service Layer
-**Goal:** Orchestrate business logic
+### Phase 5: Service / Use Case Layer
+**Goal:** Orchestrate business logic and coordinate between layers
 
 ---
 
-### Phase 6: Handler Layer
-**Goal:** Expose HTTP endpoints
+### Phase 6: Boundary Layer
+**Goal:** Expose external interfaces (HTTP handlers, CLI commands, event consumers)
 
 ---
 

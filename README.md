@@ -1,35 +1,120 @@
-Reviewing software security on code layer is already part of the routine. However we also need to perform test for new feature to actually ensure that it is really secure. Especially now that agent can perform interaction in browser or call API.
+# Agentic SDLC Workshop
 
-Task
-...
+An autonomous software development lifecycle (SDLC) powered by specialized AI agents running in VS Code Copilot agent mode. A single orchestrator drives features from raw idea to QA-verified, documented code.
 
-Friction
-...
+## Architecture Overview
 
-Desired State
-...
+```
+User ──► SDLC Orchestrator (Sisyphus)
+              │
+              ├─ Stage 0: Context Detection (reads project-config.md)
+              ├─ Stage 1: PO ──► REQUIREMENTS.md
+              ├─ Stage 2: Architect ──► PLAN.md
+              ├─ Stage 3: CTO ──► APPROVED / REVISION REQUIRED
+              ├─ Stage 4: Implementor ──► Code
+              ├─ Stage 5: QA Lead ──► QA_REPORT.md
+              │     └─ (auto) Athena ──► ATHENA_REPORT.md (after 2+ QA rejections)
+              └─ Stage 6: Tech Writer ──► ADR.md
+```
 
-Impact
-...
+Every stage has a **human review gate** — the orchestrator pauses for approval before proceeding.
 
-TODO:
-goals: Create Proxy Service to PokeAPI
+## Agent Roster
 
-Create Master Agent:
-tugasnya adalah orchestrate subagents (roma)
+| Agent | Role | File | User-Invocable |
+|-------|------|------|----------------|
+| **SDLC Orchestrator** | Coordinates the full workflow, manages review gates and stage transitions | `.github/agents/sdlc-orchestrator.agent.md` | Yes |
+| **PO** | Transforms raw task descriptions into structured REQUIREMENTS.md | `.github/agents/po.agent.md` | No |
+| **Architect** | Translates requirements into phased implementation plans | `.github/agents/architect.agent.md` | No |
+| **CTO** | Reviews and approves/rejects architectural plans | `.github/agents/cto.agent.md` | No |
+| **Implementor** | Writes production-ready code following the approved plan | `.github/agents/implementor.agent.md` | No |
+| **QA Lead** | Verifies implementation against requirements and produces QA reports | `.github/agents/qa-lead.agent.md` | No |
+| **Tech Writer** | Produces the permanent Architectural Decision Record (ADR) | `.github/agents/tech-writer.agent.md` | No |
+| **Athena** | Meta-agent that analyzes workflow failures and proposes instruction improvements | `.github/agents/athena.agent.md` | Yes |
 
-Create Sub Agents:
-Product Owner (PO): Defines what to build (REQUIREMENTS.md). (adhi)
-input: raw task, PRD link, 
+## Quick Start
 
-Architect: Defines how to build it (PLAN.md). (oki)
+### 1. Configure your project
 
-CTO: Quality gatekeeper; approves or rejects the Architect's plan. (jason)
+Fill in `.github/project-config.md` with your project's language, framework, architecture pattern, build/test commands, and code conventions. This file is read by all agents to adapt their behavior.
 
-Implementor: Writes the actual code (Go-focused) based on the approved plan. (roma)
+### 2. Run the orchestrator
 
-QA Lead: Validates the code against requirements (QA_REPORT.md). (adhi)
+In VS Code Copilot Chat, invoke the SDLC Orchestrator:
 
-Tech Writer: Finalizes the permanent record (ADR.md). (oki)
+```
+@sdlc-orchestrator Build a user authentication module with JWT tokens and role-based access control
+```
 
-openapi from pokeapi (jason)
+The orchestrator will walk through all stages, pausing for your review at each gate.
+
+### 3. Invoke Athena (optional)
+
+After a run that felt inefficient or had repeated QA rejections, invoke Athena manually:
+
+```
+@athena Analyze the last SDLC run — the implementor kept failing QA on input validation
+```
+
+Athena produces an advisory report with proposed instruction changes. Review and apply them manually.
+
+## Directory Structure
+
+```
+.github/
+├── agents/                      # Agent definitions
+│   ├── sdlc-orchestrator.agent.md
+│   ├── po.agent.md
+│   ├── architect.agent.md
+│   ├── cto.agent.md
+│   ├── implementor.agent.md
+│   ├── qa-lead.agent.md
+│   ├── tech-writer.agent.md
+│   └── athena.agent.md
+├── workflow_templates/          # Templates agents use to produce artifacts
+│   ├── REQUIREMENTS.md
+│   ├── PLAN.md
+│   ├── QA_REPORT.md
+│   ├── ADR.md
+│   └── ATHENA_REPORT.md
+└── project-config.md            # Project-specific conventions (language, framework, etc.)
+
+docs/
+├── adr/                         # Generated ADRs and supporting artifacts
+│   └── XXX-feature-name/
+│       ├── REQUIREMENTS.md
+│       ├── PLAN.md
+│       └── QA_REPORT.md
+└── athena/                      # Athena meta-analysis reports
+    └── YYYY-MM-DD-slug.md
+```
+
+## How Athena Works
+
+Athena is the continuous improvement meta-agent. It operates in two modes:
+
+**Manual trigger:** Invoke `@athena` anytime with a description of what went wrong. It reads the relevant artifacts and transcripts, diagnoses the root cause, and proposes targeted instruction changes.
+
+**Auto-trigger:** The orchestrator automatically invokes Athena when the QA Lead has rejected the implementation **2 or more times** in a single run. The report is surfaced to the human at the review gate alongside the QA rejection.
+
+Athena is **advisory only** — it never edits agent files directly. All proposed changes are presented as before/after diffs for human review.
+
+## Configuring for a New Project
+
+1. Copy this `.github/` directory into your repository
+2. Edit `.github/project-config.md` to match your project's stack:
+   - Set language, framework, and runtime
+   - Define build, test, and lint commands
+   - Specify the architecture pattern and layer ordering
+   - Document error handling, logging, and other conventions
+3. Start using `@sdlc-orchestrator` to build features
+
+If `project-config.md` is absent, agents will attempt to infer conventions from the codebase, but explicit configuration produces better results.
+
+## Design Principles
+
+- **Agent isolation:** Each agent has a strict scope and cannot perform another agent's job
+- **Human-in-the-loop:** Every stage requires human approval before proceeding
+- **Language agnosticism:** All agents derive conventions from `project-config.md`, not hardcoded assumptions
+- **Advisory improvement:** Athena proposes changes but never applies them automatically
+- **Artifact trail:** Every feature produces REQUIREMENTS.md → PLAN.md → Code → QA_REPORT.md → ADR.md

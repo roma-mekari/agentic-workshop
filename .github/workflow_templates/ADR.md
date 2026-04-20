@@ -89,11 +89,11 @@
 - ✅ Requirement category 3: X/Y criteria met
 
 ### Architecture Compliance
-- ✅ Clean Architecture pattern followed
-- ✅ CLAUDE.md guidelines followed
+- ✅ Project architecture pattern followed (per `project-config.md`)
+- ✅ Code conventions adhered to
 - ✅ Security best practices implemented
-- ✅ Context propagation throughout
-- ✅ Structured error handling via `pkg/errors`
+- ✅ Error handling follows project standards
+- ✅ Input validation at boundary layer
 
 ---
 
@@ -109,7 +109,7 @@
 - **Commit:** `[commit-hash]`
 
 **Related Documentation:**
-- **Coding Guidelines:** [CLAUDE.md](../../CLAUDE.md)
+- **Project Configuration:** [project-config.md](../../.github/project-config.md)
 - **Related ADRs:** [ADR-YYY](./YYY-related-feature.md)
 
 ---

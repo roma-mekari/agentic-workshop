@@ -38,7 +38,7 @@ The feature is considered "Done" when:
 3. [ ] **Reliability**: [Uptime or error rate requirements]
 
 ### Quality Requirements
-1. [ ] **Code Quality**: Passes `make quality-checks` without warnings
+1. [ ] **Code Quality**: Passes lint and static analysis checks without warnings
 2. [ ] **Test Coverage**: Minimum XX% coverage for new code
 3. [ ] **Documentation**: All public APIs documented
 
@@ -46,16 +46,17 @@ The feature is considered "Done" when:
 
 ## 4. Technical Constraints
 
+> **Note:** Derive these from `.github/project-config.md`. The examples below are placeholders — replace them with the actual project conventions.
+
 ### Must Have
-* **Database**: PostgreSQL 14.x compatible (avoid PG 15+ features)
-* **Framework**: Follow Clean Architecture as per CLAUDE.md
-* **Error Handling**: Use structured errors (`pkg/errors`)
-* **Context**: Propagate context through all layers
+* **Architecture**: Follow the architecture pattern defined in `project-config.md`
+* **Error Handling**: Use the project's prescribed error handling pattern
+* **Conventions**: Adhere to all code conventions in `project-config.md`
 
 ### Must Not Have
 * **Breaking Changes**: No changes to existing public APIs
 * **Dependencies**: No new external dependencies without approval
-* **Database**: No direct SQL queries (use repository pattern)
+* **Secrets**: No hardcoded credentials or environment-specific values
 
 ### Out of Scope
 * Feature X (deferred to Phase 2)

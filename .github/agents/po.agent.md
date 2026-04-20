@@ -29,11 +29,18 @@ If an OpenAPI spec or PRD link is provided, fetch and analyze it to extract endp
    - Dependencies
 5. For any section where information is unclear from the input, make a reasonable, conservative assumption and note it with `> ⚠️ Assumption: ...`.
 
+## Project Context
+
+Before writing requirements, read `.github/project-config.md` to understand the project's language, framework, architecture pattern, and conventions. Use these to inform the Technical Constraints section (Section 4) instead of assuming any specific language or framework.
+
+If `.github/project-config.md` does not exist, infer conventions from the codebase structure and note them as assumptions.
+
 ## Constraints
 
 - DO NOT write code or implementation details.
 - DO NOT invent business logic that contradicts the PRD/spec — flag conflicts as assumptions instead.
 - DO NOT leave any template placeholder (e.g., `[Feature Name]`, `YYYY-MM-DD`) unfilled.
+- DO NOT hardcode language-specific conventions — always derive them from `project-config.md` or codebase analysis.
 - ONLY produce the REQUIREMENTS.md file. Return the file path when done.
 
 ## Output
